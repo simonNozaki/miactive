@@ -1,3 +1,5 @@
+// Reactivity in Vue 3 - How does it work?: https://www.youtube.com/watch?v=NZfNS4sJ8CI
+
 type TrackedMarkers = {
   /**
    * wasTracked
@@ -12,17 +14,17 @@ type TrackedMarkers = {
 type Dep = Set<ReactiveEffect> & TrackedMarkers
 
 // The main WeakMap that stores {target -> key -> dep} connections.
-// Conceptually, it's easier to think of a dependency as a Dep class
-// which maintains a Set of subscribers, but we simply store them as
-// raw Sets to reduce memory overhead.
+// それぞれのプロパティに依存するオブジェクトのストア。
+// k: reactive オブジェクトのプロパティ名
 type KeyToDepMap = Map<any, Dep>
 const targetMap = new WeakMap<any, KeyToDepMap>()
-
-let shouldTrack = true
 
 // effect: https://github.com/vuejs/core/blob/main/packages/reactivity/src/effect.ts
 class ReactiveEffect<T = any> {
   active = true
+  /**
+   * 値の変化に応じて再実行されるはずの、effectの集合
+   */
   deps: Dep[] = []
   parent: ReactiveEffect | undefined = undefined
 
@@ -31,12 +33,11 @@ class ReactiveEffect<T = any> {
   run(): T {
     this.parent = activeEffect
     activeEffect = this
-    shouldTrack = true
     return this.fn()
   }
 }
 
-let activeEffect: ReactiveEffect
+let activeEffect: ReactiveEffect | undefined
 
 /**
  * 追跡しているプロパティの購読者である作用を探してSetに追加する
@@ -44,18 +45,15 @@ let activeEffect: ReactiveEffect
  * @param key 
  */
 const track = (target: any, key: unknown) => {
-  const depsMap = targetMap.get(target)
+  let depsMap = targetMap.get(target)
+  if (!depsMap) {
+    targetMap.set(target, (depsMap = new Map()))
+  }
   const dep = depsMap.get(key)
+  // TODO: サブスクライブするDepがなければ ReactiveEffect　の Set を生成する
   dep.add(activeEffect)
   activeEffect.deps.push(dep)
 
-  // TODO: サブスクライブするDepがなければ ReactiveEffect　の Set を生成する
-
-  // (たぶん)同じことやってる
-  // if (activeEffect) {
-  //   const effects = getSubscribersForProperty(target, key)
-  //   effects.add(activeEffect)
-  // }
 }
 
 /**
@@ -71,26 +69,26 @@ const trigger = (target: object, key: unknown) => {
   dep.forEach((d) => d.run())
 }
 
-const reactive = <T extends object>(obj: T) => {
-  return new Proxy(obj, {
-    get: (target: object, key: string | symbol) => {
+export const reactive = <T extends object>(obj: T) => {
+  const handler: ProxyHandler<any> = {
+    // target[key]とReflect.get(target, key)は外側から見ると等価
+    get: (target: T, key: string | symbol, receiver) => {
       track(target, key)
-      return Reflect.get(target, key)
+      return Reflect.get(target, key, receiver)
     },
-    set: (target: object, key: string | symbol, newValue: unknown): boolean => {
+    set: (target: T, key: string | symbol, newValue: unknown, receiver): boolean => {
       Reflect.set(target, key, newValue)
       trigger(target, key)
-      return true
+      return Reflect.set(target, key, newValue, receiver)
     }
-  })
+  }
+  return new Proxy(obj, handler)
 }
 
-const ref = (value?: unknown) => {
-  return createRef(value)
-}
-
-const createRef = (rawValue?: unknown) => {
-  return new Ref(rawValue)
+export function ref<T>(value: T): Ref<T>
+export function ref<T = any>(): Ref<T | undefined>
+export function ref(value?: unknown) {
+  return new Ref(value)
 }
 
 class Ref<T> {
@@ -106,20 +104,6 @@ class Ref<T> {
   }
 }
 
-const effect = <T = any>(fn: () => T) => {
-  const _effect = new ReactiveEffect(fn)
-  _effect.run()
-}
-
-/**
- * 作用(引数となる関数/処理)を依存している変数(関数内で使う変数)のサブスクライバにする: 変数の変更通知を受け取って作用を再実施
- * @param update 
- */
-const whenDepsChange = (update: () => void) => {
-  const effect = () => {
-    // activeEffect = effect()
-    update()
-    activeEffect = null
-  }
-  effect()
+export const effect = <T = any>(fn: () => T) => {
+  new ReactiveEffect(fn).run()
 }
