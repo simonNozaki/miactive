@@ -6,6 +6,14 @@ type Dep = Set<ReactiveEffect>
 type KeyToDepMap = Map<any, Dep>
 const targetMap = new WeakMap<any, KeyToDepMap>()
 
+/**
+ * track, trigger時に処理をインターセプトするオプション
+ */
+interface ReactiveEffectOption {
+  onTrack(): void
+  onTrigger(): void
+}
+
 // effect: https://github.com/vuejs/core/blob/main/packages/reactivity/src/effect.ts
 class ReactiveEffect<T = any> {
   /**
@@ -13,7 +21,12 @@ class ReactiveEffect<T = any> {
    */
   deps: Dep[] = []
 
-  constructor(public fn: () => T) {}
+  constructor(fn: () => T, _option?: ReactiveEffectOption)
+  constructor(private fn: () => T, private _option?: ReactiveEffectOption) {}
+
+  get option(): ReactiveEffectOption | null {
+    return this._option
+  }
 
   run(): T {
     activeEffect = this
@@ -44,6 +57,7 @@ export const track = (target: any, key: unknown) => {
   }
 
   if (activeEffect) {
+    activeEffect.option?.onTrack()
     dep.add(activeEffect)
     activeEffect.deps.push(dep)
   }
@@ -59,6 +73,7 @@ export const trigger = (target: object, key: unknown) => {
   const dep = targetMap.get(target)?.get(key)
   if (dep) {
     dep.forEach((d) => {
+      d.option?.onTrigger()
       d.run()
     })
   }
@@ -67,6 +82,6 @@ export const trigger = (target: object, key: unknown) => {
 /**
  * アクティブなeffectを指定して実行する
  */
-export const effect = <T = any>(fn: () => T) => {
-  new ReactiveEffect(fn).run()
+export const effect = <T = any>(fn: () => T, option?: ReactiveEffectOption) => {
+  new ReactiveEffect(fn, option).run()
 }
