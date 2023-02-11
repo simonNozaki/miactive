@@ -8,22 +8,26 @@
     <body>
       <h1>価格計算</h1>
       <div>
-        <form>
-          <div>
-            <label> 価格 </label>
-            <input id="price" type="number" value="0">
-          </div>
-          <div>
-            <label> 数量 </label>
-            <input id="quantity" type="number" value="0">
-          </div>
-          <div>
-            <label> 税率(%) </label>
-            <input id="tax" type="number" value="10"> %
-          </div>
-        </form>
+        <div>
+          <label> 商品名 </label>
+          <input id="name" type="text">
+        </div>
+        <div>
+          <label> 価格 </label>
+          <input id="price" type="number" value="0">
+        </div>
+        <div>
+          <label> 数量 </label>
+          <input id="quantity" type="number" value="0">
+        </div>
+        <div>
+          <label> 税率(%) </label>
+          <input id="tax" type="number" value="10"> %
+        </div>
       </div>
       <div>
+        <h2> 明細 </h2>
+        <p id="productName"></p>
         <p id="totalPrice"></p>
       </div>
     </body>
