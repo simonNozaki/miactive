@@ -18,7 +18,9 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: './public/css/style.css'
+    }),
   ],
   module: {
     rules: [
@@ -29,7 +31,7 @@ const config = {
       },
       {
         test: /\.css$/i,
-        use: [stylesHandler,'css-loader'],
+        use: [stylesHandler, 'css-loader', 'postcss-loader',],
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,

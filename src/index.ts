@@ -1,5 +1,6 @@
 import { effect } from './effect'
 import { reactive } from './reactive'
+import '../public/css/style.css'
 
 console.log('completed script load')
 
@@ -43,7 +44,7 @@ name.addEventListener('input', () => {
 effect(() => {
   total = product.price * product.quantity * (1 + (product.tax / 100))
   // effectと描画は分けたほうがいいが、便宜的にeffectに含めておく
-  totalPrice.textContent = `¥${total}`
+  totalPrice.textContent = `¥${total.toFixed(0)}`
 }, {
   onTrack() {
     console.log('tracked!')
