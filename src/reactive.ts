@@ -5,7 +5,7 @@ import { track, trigger } from "./effect"
  * @param {T} obj オリジナルのオブジェクト、これをProxyでラップする
  * @param T 型パラメータ
  */
-export const reactive = <T extends object>(obj: T) => {
+export const reactive = <T extends object>(obj: T): T => {
   const handler: ProxyHandler<any> = {
     // target[key]とReflect.get(target, key)は外側から見ると等価
     get: (target: T, key: string | symbol, receiver) => {
