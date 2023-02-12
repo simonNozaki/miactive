@@ -2,10 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-.main-panel {
-  @apply bg-gray-400
+.container {
+  @apply bg-gray-50
+}
+
+.title {
+  @apply text-2xl
+}
+
+.subtitle {
+  @apply text-xl
+}
+
+.card {
+  @apply bg-gray-300 rounded-lg p-4
 }
 
 .input {
-  @apply rounded bg-gray-200
+  @apply 
+    rounded-md shadow-sm border border-slate-200 outline-none font-medium
+    px-2 py-3 my-1
+    focus:shadow-md focus:border-[#6A64F1]
+}
+
+.item-label {
+  @apply text-gray-400 text-sm block
 }

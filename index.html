@@ -4,32 +4,48 @@
     <meta charset="utf-8" />
     <title>リアクティブ価格計算</title>
   </head>
-  <main>
-    <body>
-      <h1>価格計算</h1>
-      <div>
-        <div>
-          <label> 商品名 </label>
-          <input id="name" type="text">
+  <body class="bg-gray-50">
+    <header class="py-10">
+      <div class="container mx-auto">
+        <h1 class="text-2xl">価格計算</h1>
+      </div>
+    </header>
+    <main class="py-10">
+      <div class="container mx-auto">
+        <div class="flex justify-center">
+          <div class="bg-white shadow-sm p-10 w-3/6">
+            <div class="p-2">
+              <label class="item-label" for="id"> 商品名 </label>
+              <input id="name" type="text" class="input w-full">
+            </div>
+            <div class="p-2">
+              <label class="item-label" for="price"> 価格 </label>
+              <input id="price" type="number" value="0" class="input w-full">
+            </div>
+            <div class="p-2">
+              <label class="item-label" for="quantity"> 数量 </label>
+              <input id="quantity" type="number" value="0" class="input w-full">
+            </div>
+            <div class="p-2">
+              <label class="item-label" for="tax"> 税率(%) </label>
+              <input id="tax" type="number" value="10" class="input w-full">
+            </div>
+          </div>
         </div>
-        <div>
-          <label> 価格 </label>
-          <input id="price" type="number" value="0">
-        </div>
-        <div>
-          <label> 数量 </label>
-          <input id="quantity" type="number" value="0">
-        </div>
-        <div>
-          <label> 税率(%) </label>
-          <input id="tax" type="number" value="10"> %
+        <div class="flex justify-center my-2">
+          <div class="bg-white shadow-sm p-10 w-3/6">
+            <h2 class="text-xl"> 明細 </h2>
+            <div class="my-2">
+              <label class="item-label"> 商品名 </label>              
+              <p id="productName" class="text-lg"></p>
+            </div>
+            <div class="my-2">
+              <label class="item-label"> 小計 </label>
+              <p id="totalPrice" class="text-lg"></p>
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <h2> 明細 </h2>
-        <p id="productName"></p>
-        <p id="totalPrice"></p>
-      </div>
-    </body>
-  </main>
+    </main>
+  </body>
 </html>
