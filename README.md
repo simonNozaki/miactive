@@ -38,6 +38,9 @@ webpack dev serverの起動
 $ npm run serve
 ```
 
+画面イメージ
+![panel](docs/images/panel.png)
+
 ## リファレンス
 ### チュートリアル、解説
 - [Reactivity in Depth](https://vuejs.org//guide/extras/reactivity-in-depth.html#how-reactivity-works-in-vue)
