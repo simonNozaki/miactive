@@ -6,12 +6,12 @@
   @apply bg-gray-50
 }
 
-.title {
-  @apply text-2xl
+h1 {
+  @apply text-2xl font-semibold text-gray-700;
 }
 
-.subtitle {
-  @apply text-xl
+h2 {
+  @apply text-xl font-semibold text-gray-700;
 }
 
 .card {
@@ -20,11 +20,19 @@
 
 .input {
   @apply 
-    rounded-md shadow-sm border border-slate-200 outline-none font-medium
-    px-2 py-3 my-1
+    rounded shadow-sm border border-slate-200 outline-none
+    p-2 my-1
     focus:shadow-md focus:border-[#6A64F1]
 }
 
 .item-label {
   @apply text-gray-400 text-sm block
+}
+
+.button-link {
+  @apply text-blue-500;
+}
+
+.panel {
+  @apply bg-white shadow-sm rounded p-10 w-3/6;
 }
