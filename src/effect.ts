@@ -15,7 +15,7 @@ interface ReactiveEffectOption {
 }
 
 // effect: https://github.com/vuejs/core/blob/main/packages/reactivity/src/effect.ts
-class ReactiveEffect<T = any> {
+export class ReactiveEffect<T = any> {
   /**
    * 値の変化に応じて再実行されるはずの、effectの集合
    */

@@ -6,7 +6,7 @@ export function ref(value?: unknown) {
   return new Ref(value)
 }
 
-class Ref<T> {
+export class Ref<T> {
   constructor (private _value: T) {}
 
   get value(): T {

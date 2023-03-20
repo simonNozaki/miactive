@@ -21,6 +21,7 @@ currentStock.addEventListener('input', (e) => {
   const { target } = e
   if (target instanceof HTMLInputElement) {
     // input eventを受信するたびにrefの更新
+    // valueのsetterをコールすることで間接的にtriggerを呼び出している
     currentStockInput.value = Number.parseInt(target.value)
   }
 })
