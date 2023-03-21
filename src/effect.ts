@@ -30,7 +30,9 @@ export class ReactiveEffect<T = any> {
 
   run(): T {
     activeEffect = this
-    return this.fn()
+    const r = this.fn()
+    activeEffect = null
+    return r
   }
 }
 
@@ -56,7 +58,8 @@ export const track = (target: any, key: unknown) => {
     depsMap.set(key, (dep = new Set<ReactiveEffect>()))
   }
 
-  if (activeEffect) {
+  // 現在のeffectが指定されていて、かつ依存しているリアクティビティがない場合にセットする
+  if (activeEffect && !dep.has(activeEffect)) {
     activeEffect.option?.onTrack()
     dep.add(activeEffect)
     activeEffect.deps.push(dep)
