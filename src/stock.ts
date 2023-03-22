@@ -1,3 +1,4 @@
+import { computed } from './computed'
 import { effect } from './effect'
 import { ref } from './ref'
 
@@ -10,8 +11,8 @@ const adjustmentsType = document.getElementById('adjustments-type') as HTMLInput
 const totalStock = document.getElementById('total-stock')
 const adjustmentsResult = document.getElementById('adjustments-result')
 
-const currentStockInput = ref(0)
-const stockAdjustmentsInput = ref(0)
+const currentStockInput = ref(Number.parseInt(currentStock.value))
+const stockAdjustmentsInput = ref(Number.parseInt(stockAdjustments.value))
 const adjustmentTypeInput = ref('')
 
 // ---------------------------------------
