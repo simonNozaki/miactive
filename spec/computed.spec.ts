@@ -18,4 +18,21 @@ describe('computed spec', () => {
     price.value = 150
     expect(total.value).toBe(750)
   })
+
+  it('should set values to computed properties', () => {
+    const firstName = ref('Harry')
+    const lastName = ref('Potter')
+
+    const fullName = computed({
+      get() {
+        return firstName.value + ' ' + lastName.value
+      },
+      set(newValue: string) {
+        [firstName.value, lastName.value] = newValue.split(' ')
+      }
+    })
+    expect(fullName.value).toBe('Harry Potter')
+    firstName.value = 'James'
+    expect(fullName.value).toBe('James Potter')
+  })
 })
